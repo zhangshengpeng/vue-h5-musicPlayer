@@ -1,6 +1,5 @@
 <template>
   <div>
-    <audio :src="song.url" id="audio" controls></audio>
   </div>
 </template>
 

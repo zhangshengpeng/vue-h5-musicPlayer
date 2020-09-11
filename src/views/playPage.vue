@@ -1,6 +1,5 @@
 <template>
   <div>
-    playpage
   </div>
 </template>
 

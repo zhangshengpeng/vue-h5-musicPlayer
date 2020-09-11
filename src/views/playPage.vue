@@ -1,6 +1,6 @@
 <template>
   <div>
-    <audio :src="song.url" id="audio" controls></audio>
+    playpage
   </div>
 </template>
 
@@ -11,10 +11,15 @@ export default {
   name: 'playPage',
   data () {
     return {
-      song: {
-        url: 'https://www.zsp.cool/music/dmbj/盗墓笔记1七星鲁王21.周建龙.mp3'
-      }
+      audio: null
     }
+  },
+  mounted () {
+    // this.audio = this.$parent.$refs.audio
+    // console.log(this.audio.currentTime)
+    // console.log(this.audio.duration)
+  },
+  methods: {
   }
 }
 </script>

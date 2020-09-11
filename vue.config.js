@@ -12,7 +12,6 @@ module.exports = {
     proxy: {
       '/api': {
         target: 'http://www.zsp.cool',
-        // target: 'http://localhost:1000',
         changeOrigin: true,
         pathRewrite: {
           '^/api': ''

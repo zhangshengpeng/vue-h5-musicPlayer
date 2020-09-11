@@ -1,6 +1,5 @@
 <template>
   <div id="app">
-    <audio :src="song.url" id="audio" ref="audio" controls></audio>
     <router-view/>
   </div>
 </template>

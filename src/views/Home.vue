@@ -16,9 +16,15 @@ export default {
   data () {
     return {
       song: {
-        url: 'https://www.zsp.cool/music/dmbj/盗墓笔记1七星鲁王21.周建龙.mp3'
+        url: 'https://www.zsp.cool/music/dmbj/盗墓笔记1七星鲁王24.周建龙.mp3'
       }
     }
   }
 }
 </script>
+
+<style lang="less" scoped>
+  .home {
+    height: 100vh;
+  }
+</style>

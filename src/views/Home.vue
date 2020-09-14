@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <player :url="song.url"/>
+    <player />
   </div>
 </template>
 
@@ -26,5 +26,7 @@ export default {
 <style lang="less" scoped>
   .home {
     height: 100vh;
+    background-image: url('../assets/img/dmbj.jpg');
+    background-size: cover;
   }
 </style>

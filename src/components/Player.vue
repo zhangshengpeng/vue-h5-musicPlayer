@@ -1,10 +1,15 @@
 <template>
   <div class="player">
-    <audio ref="audio" :src="url" id="audio" controls></audio>
+    <audio ref="audio" muted="muted" :src="url" id="audio" controls></audio>
+    <p v-if="bookList.length">{{ bookName }}</p>
+    <v-drop-menu>
+      <v-drop-item v-model="value1" :options="option1" />
+    </v-drop-menu>
     <div class="context">
       <div class="progress">
-        <div class="progress-all"></div>
-        <div class="progress-point" ref="point" :style="{ left: `${pointPosition}px` }"></div>
+        <div ref="all" class="progress-all"></div>
+        <div class="progress-point" ref="point" :style="{ left: `${pointPosition}px` }">
+        </div>
         <div class="progress-done"></div>
       </div>
       <div class="time">
@@ -12,19 +17,26 @@
         <span>{{ length | formatSeconds}}</span>
       </div>
       <div class="p">
-        <div>
+        <div style="display: flex; justify-content: center;width: 100%">
           <img class="p-icon" @click="handlePrev" src="@/assets/img/prev.png">
-          <img @click="handleStart()" class="p-icon" style="border: solid 2px #ffffff; border-radius: 50%" :src="img">
+          <div class="p-icon">
+            <v-loading style="padding: 0" color="#ffffff" v-if="loading" size="40px" />
+            <img v-else @click="handleStart()" style="width: 40px; height: 40px" :src="img">
+          </div>
           <img @click="handleNext" class="p-icon" src="@/assets/img/next.png">
         </div>
         <img @click="handleList" class="p-icon list" style="padding: 10px 6px" src="@/assets/img/list.png">
       </div>
     </div>
     <v-popup v-model="showList" position="right" round :style="{ width: '70%', height: '100%'}">
-      <div style="height: 100vh;padding: 0 4px; overflow: auto">
-        <div @click="changePlay(item, index)" v-for="(item, index) in resourcesList" :key="index">
+      <div style="height: 100vh;padding: 0 4px; overflow: auto;">
+        <div @click="changePlay(item, i)" v-for="(item, i) in resourcesList" :key="item.url">
           <v-divider />
-          <div>{{ item.name }}</div>
+          <div :style="{ color: bookName === item.name ? '#ee0a24' : '' }">{{ item.name }}</div>
+        </div>
+        <div>
+          <v-divider />
+          <div>到底啦~</div>
         </div>
         <div class="list-close">
           <div @click="() => { this.showList = false }">关闭</div>
@@ -35,41 +47,94 @@
 </template>
 
 <script>
-import { Popup, Divider } from 'vant'
+import { Popup, Divider, Loading, DropdownMenu, DropdownItem } from 'vant'
 import 'vant/lib/button/style'
 
 export default {
   name: 'Player',
   components: {
     VPopup: Popup,
-    VDivider: Divider
+    VDivider: Divider,
+    VLoading: Loading,
+    VDropMenu: DropdownMenu,
+    VDropItem: DropdownItem
   },
   props: {
     url: {
       type: String,
-      default: ''
+      default: 'https://www.zsp.cool/music/dmbj/qlss/周建龙-第01集 (秦岭神树).mp3'
     }
   },
   data () {
     return {
+      bookName: '秦岭神树',
       img: require('@/assets/img/begin.png'),
-      length: 0,
-      isStart: true,
+      length: 0, // 音频时长
+      isStart: true, // 是否开始播放
       audio: null,
-      pointTime: 0,
+      pointTime: 0, // 当前时间点
       timer: null,
       point: null,
       showList: false,
       resourcesList: [],
-      index: 0,
+      index: 0, // 当前播放第几集
       x: 0,
       l: 0,
-      isDown: false
+      isDown: false, // 是否按下进度点
+      loading: false, // 音频是否加载完毕
+      allWidth: 0, // 进度条总长度
+      value1: 0,
+      option1: [
+        { text: '秦岭神树', value: 0 },
+        { text: '云顶天宫', value: 1 },
+        { text: '蛇沼鬼城', value: 2 }
+      ],
+      bookList: [],
+      jumpBeginTime: 55
+    }
+  },
+  watch: {
+    value1 (val) {
+      console.log('选择书籍')
+      this.resourcesList = []
+      switch (val) {
+        case 0: {
+          for (let i = 1; i < 45; i++) {
+            const j = i < 10 ? '0' + i : i
+            this.resourcesList.push({
+              url: `https://www.zsp.cool/music/dmbj/qlss/周建龙-第${j}集 (秦岭神树).mp3`,
+              name: `周建龙 - 第${j}集 (秦岭神树).mp3`
+            })
+          }
+          this.jumpBeginTime = 55
+          break
+        }
+        case 1: {
+          for (let i = 1; i < 39; i++) {
+            this.resourcesList.push({
+              url: `https://www.zsp.cool/music/dmbj/ydtg/云顶天宫${i}.mp3`,
+              name: `周建龙 - 第${i}集 (云顶天宫).mp3`
+            })
+          }
+          this.jumpBeginTime = 72
+          break
+        }
+        case 2: {
+          for (let i = 1; i < 39; i++) {
+            this.resourcesList.push({
+              url: `https://www.zsp.cool/music/dmbj/szgc/蛇沼鬼城${i}.mp3`,
+              name: `周建龙 - 第${i}集 (蛇沼鬼城).mp3`
+            })
+          }
+          this.jumpBeginTime = 53
+          break
+        }
+      }
     }
   },
   computed: {
     pointPosition () {
-      return this.pointTime / this.length * 374
+      return this.pointTime / this.length * this.allWidth
     }
   },
   filters: {
@@ -85,73 +150,119 @@ export default {
       return `${middle}:${seconds}`
     }
   },
+  created () {
+    let list = []
+    for (let i = 1; i < 45; i++) {
+      const j = i < 10 ? '0' + i : i
+      list.push({
+        url: `https://www.zsp.cool/music/dmbj/qlss/周建龙-第${j}集 (秦岭神树).mp3`,
+        name: `周建龙 - 第${j}集 (秦岭神树).mp3`
+      })
+    }
+    this.bookList.push(list)
+    list = []
+    for (let i = 1; i < 39; i++) {
+      list.push({
+        url: `https://www.zsp.cool/music/dmbj/ydtg/云顶天宫${i}.mp3`,
+        name: `周建龙 - 第${i}集 (云顶天宫).mp3`
+      })
+    }
+    this.bookList.push(list)
+    list = []
+    for (let i = 1; i < 39; i++) {
+      list.push({
+        url: `https://www.zsp.cool/music/dmbj/szgc/蛇沼鬼城${i}.mp3`,
+        name: `周建龙 - 第${i}集 (蛇沼鬼城).mp3`
+      })
+    }
+    this.bookList.push(list)
+    this.resourcesList = this.bookList[0]
+    console.log(this.bookList, this.resourcesList)
+  },
   mounted () {
+    this.allWidth = this.$refs.all.offsetWidth
     this.audio = this.$refs.audio
+    if (window.localStorage.getItem('listenHistory')) {
+      const w = JSON.parse(window.localStorage.getItem('listenHistory'))
+      console.log(w)
+      this.value1 = w.value1
+      this.index = w.index
+      this.url = this.bookList[w.value1][w.index].url
+    }
     // 跳过前60s
-    this.audio.onloadedmetadata = () => {
-      this.audio.currentTime = 60
-      this.length = this.audio.duration
+    this.audio.onloadstart = () => {
       console.log('开始加载')
+      this.loading = true
+      this.bookName = this.bookList[this.value1][this.index].name
+    }
+    this.audio.onloadedmetadata = () => {
+      this.audio.currentTime = this.jumpBeginTime
+      this.length = this.audio.duration
+      console.log('获取到时间信息')
     }
     // 加载完毕可以开始播放
-    setTimeout(() => {
-      this.audio.oncanplay = () => {
-        this.isStart = false
-        this.audio.play()
-        this.img = require('@/assets/img/stop.png')
-      }
-    }, 500)
+    this.audio.oncanplay = () => {
+      this.loading = false
+    }
+    // 加载足够长度
+    this.audio.oncanplaythrough = () => {
+      this.audio.play()
+      this.isStart = false
+      this.img = require('@/assets/img/stop.png')
+      window.localStorage.setItem('listenHistory', JSON.stringify({
+        value1: this.value1,
+        index: this.index
+      }))
+      console.log('设置历史记录：', this.value1, this.index)
+    }
     // 进度条更新
     this.timer = setInterval(() => {
-      this.pointTime = Math.ceil(this.audio.currentTime)
+      if (!this.isDown) {
+        this.pointTime = Math.ceil(this.audio.currentTime)
+      }
+      if (this.length > 0 && this.length - this.pointTime < 40) {
+        this.handleNext()
+      }
     }, 1000)
     // 监听进度条拖拽
     this.point = this.$refs.point
-    this.point.onmousedown = e => {
-      this.x = e.clientX
+    this.point.addEventListener('touchstart', e => {
+      this.x = e.touches[0].clientX
       this.l = this.point.offsetLeft
       this.isDown = true
       this.point.style.cursor = 'move'
-      console.log(this.x, this.l)
-    }
+    })
     // 鼠标移动
-    window.onmousemove = e => {
+    this.point.addEventListener('touchmove', e => {
       if (this.isDown === false) {
         return
       }
       // 获取x和y
-      var nx = e.clientX
+      var nx = e.touches[0].clientX
       // 计算移动后的左偏移量和顶部的偏移量
       var nl = nx - (this.x - this.l)
       this.point.style.left = nl + 'px'
-    }
+    })
     // 鼠标抬起事件
-    this.point.onmouseup = () => {
+    this.point.addEventListener('touchend', () => {
       // 开关关闭
       this.isDown = false
-      this.point.style.cursor = 'default'
-    }
-
-    for (let i = 1; i < 21; i++) {
-      this.resourcesList.push({
-        url: `https://www.zsp.cool/music/dmbj/盗墓笔记1七星鲁王${20 + i}.周建龙.mp3`,
-        name: `盗墓笔记1七星鲁王${20 + i}.周建龙.mp3`
-      })
-    }
+      this.audio.currentTime = this.point.offsetLeft / this.$refs.all.offsetWidth * this.length
+    })
+    console.log(this.url)
   },
   beforeDestroy () {
     clearInterval(this.timer)
   },
   methods: {
     changePlay (item, index) {
+      console.log('播放项：', item)
       if (this.index !== index) {
         this.index = index
         this.url = item.url
-        this.audio.canplay = this.handleStart()
       }
     },
     handleStart () {
-      console.log(this.isStart)
       if (this.isStart) {
         this.audio.play()
         this.img = require('@/assets/img/stop.png')
@@ -177,6 +288,16 @@ export default {
 }
 </script>
 <style scoped lang="less">
+/deep/ .van-dropdown-menu__bar {
+  background: none;
+  box-shadow: 0 0 0 0;
+}
+/deep/ .van-dropdown-menu__title--active, /deep/ .van-ellipsis {
+  color: #ffffff;
+}
+p {
+  color: #ffffff;
+}
 .list-close {
   position: fixed;
   width: 100%;
@@ -184,6 +305,7 @@ export default {
   right: 0;
   background: #ffffff;
   padding:14px 0px;
+  box-shadow: 0 0 8px 2px #aaaaaa;
 }
 .list {
   position: absolute;
@@ -216,22 +338,22 @@ export default {
 }
 .progress {
   position: relative;
-  height: 6px;
+  height: 10px;
   margin: 0 20px;
   &-all {
     position: relative;
     margin-top: 2px;
     width: 100%;
-    height: 2px;
+    height: 4px;
     border-radius: 2px;
     background: #999999;
   }
   &-point {
     position: absolute;
-    top: -2px;
+    top: -6px;
     left: 0px;
-    width: 6px;
-    height: 6px;
+    width: 16px;
+    height: 16px;
     background: #ffffff;
     border-radius: 50%;
     z-index: 10000;
@@ -241,9 +363,10 @@ export default {
   display: none;
 }
 .player {
-  position: relative;
+  position: absolute;
+  width: 100vw;
   height: 100%;
-  background: #666666;
+  background: rgba(70, 70, 70, 0.5);
 }
 h3 {
   margin: 40px 0 0;

@@ -34,9 +34,9 @@
           <v-divider />
           <div :style="{ color: bookName === item.name ? '#ee0a24' : '' }">{{ item.name }}</div>
         </div>
-        <div>
+        <div style="padding-bottom: 50px">
           <v-divider />
-          <div>到底啦~</div>
+          <div style="font-size:14px;color: #aaaaaa">到底啦~</div>
         </div>
         <div class="list-close">
           <div @click="() => { this.showList = false }">关闭</div>
@@ -177,7 +177,6 @@ export default {
     }
     this.bookList.push(list)
     this.resourcesList = this.bookList[0]
-    console.log(this.bookList, this.resourcesList)
   },
   mounted () {
     this.allWidth = this.$refs.all.offsetWidth
@@ -189,26 +188,28 @@ export default {
       this.index = w.index
       this.url = this.bookList[w.value1][w.index].url
     }
-    // 跳过前60s
+    // 设置初始书名
     this.audio.onloadstart = () => {
       console.log('开始加载')
       this.loading = true
       this.bookName = this.bookList[this.value1][this.index].name
     }
+    // 跳过前60s
     this.audio.onloadedmetadata = () => {
       this.audio.currentTime = this.jumpBeginTime
       this.length = this.audio.duration
       console.log('获取到时间信息')
     }
-    // 加载完毕可以开始播放
+    // 加载完毕
     this.audio.oncanplay = () => {
       this.loading = false
+      console.log('oncanplay')
+      // this.audio.play()
+      // this.isStart = false
+      // this.img = require('@/assets/img/stop.png')
     }
     // 加载足够长度
     this.audio.oncanplaythrough = () => {
-      this.audio.play()
-      this.isStart = false
-      this.img = require('@/assets/img/stop.png')
       window.localStorage.setItem('listenHistory', JSON.stringify({
         value1: this.value1,
         index: this.index
@@ -365,7 +366,7 @@ p {
 .player {
   position: absolute;
   width: 100vw;
-  height: 100%;
+  height: 100vh;
   background: rgba(70, 70, 70, 0.5);
 }
 h3 {

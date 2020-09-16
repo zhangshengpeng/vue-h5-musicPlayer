@@ -1,6 +1,7 @@
 <template>
   <div class="player">
     <audio ref="audio" muted="muted" :src="url" id="audio" controls></audio>
+    <audio ref="audio2" muted="muted" :src="url2" id="audio" controls></audio>
     <p v-if="bookList.length">{{ bookName }}</p>
     <v-drop-menu>
       <v-drop-item v-model="value1" :options="option1" />
@@ -59,12 +60,6 @@ export default {
     VDropMenu: DropdownMenu,
     VDropItem: DropdownItem
   },
-  props: {
-    url: {
-      type: String,
-      default: 'https://www.zsp.cool/music/dmbj/qlss/周建龙-第01集 (秦岭神树).mp3'
-    }
-  },
   data () {
     return {
       bookName: '秦岭神树',
@@ -72,6 +67,9 @@ export default {
       length: 0, // 音频时长
       isStart: true, // 是否开始播放
       audio: null,
+      url: 'https://www.zsp.cool/music/dmbj/qlss/周建龙-第01集 (秦岭神树).mp3',
+      audio2: null,
+      url2: 'https://www.zsp.cool/music/dmbj/qlss/周建龙-第01集 (秦岭神树).mp3',
       pointTime: 0, // 当前时间点
       timer: null,
       point: null,
@@ -181,6 +179,7 @@ export default {
   mounted () {
     this.allWidth = this.$refs.all.offsetWidth
     this.audio = this.$refs.audio
+    this.audio2 = this.$refs.audio2
     if (window.localStorage.getItem('listenHistory')) {
       const w = JSON.parse(window.localStorage.getItem('listenHistory'))
       console.log(w)
@@ -204,9 +203,9 @@ export default {
     this.audio.oncanplay = () => {
       this.loading = false
       console.log('oncanplay')
-      // this.audio.play()
-      // this.isStart = false
-      // this.img = require('@/assets/img/stop.png')
+      this.audio.play()
+      this.isStart = false
+      this.img = require('@/assets/img/stop.png')
     }
     // 加载足够长度
     this.audio.oncanplaythrough = () => {
@@ -221,7 +220,11 @@ export default {
       if (!this.isDown) {
         this.pointTime = Math.ceil(this.audio.currentTime)
       }
-      if (this.length > 0 && this.length - this.pointTime < 40) {
+      if (this.length > 0 && this.length - this.pointTime < 120 && this.resourcesList[this.index + 1] && this.url2 !== this.resourcesList[this.index + 1].url) {
+        console.log('预加载')
+        this.url2 = this.resourcesList[this.index + 1].url
+      }
+      if (this.length > 0 && this.length - this.pointTime < 60) {
         this.handleNext()
       }
     }, 1000)

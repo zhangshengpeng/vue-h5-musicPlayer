@@ -64,7 +64,7 @@ export default {
     return {
       bookName: '秦岭神树',
       img: require('@/assets/img/begin.png'),
-      length: 0, // 音频时长
+      length: 0, // 音频总时长
       isStart: true, // 是否开始播放
       audio: null,
       url: 'https://www.zsp.cool/music/dmbj/qlss/周建龙-第01集 (秦岭神树).mp3',
@@ -94,36 +94,19 @@ export default {
   watch: {
     value1 (val) {
       console.log('选择书籍')
-      this.resourcesList = []
       switch (val) {
         case 0: {
-          for (let i = 1; i < 45; i++) {
-            const j = i < 10 ? '0' + i : i
-            this.resourcesList.push({
-              url: `https://www.zsp.cool/music/dmbj/qlss/周建龙-第${j}集 (秦岭神树).mp3`,
-              name: `周建龙 - 第${j}集 (秦岭神树).mp3`
-            })
-          }
+          this.resourcesList = this.bookList[0]
           this.jumpBeginTime = 55
           break
         }
         case 1: {
-          for (let i = 1; i < 39; i++) {
-            this.resourcesList.push({
-              url: `https://www.zsp.cool/music/dmbj/ydtg/云顶天宫${i}.mp3`,
-              name: `周建龙 - 第${i}集 (云顶天宫).mp3`
-            })
-          }
+          this.resourcesList = this.bookList[1]
           this.jumpBeginTime = 72
           break
         }
         case 2: {
-          for (let i = 1; i < 39; i++) {
-            this.resourcesList.push({
-              url: `https://www.zsp.cool/music/dmbj/szgc/蛇沼鬼城${i}.mp3`,
-              name: `周建龙 - 第${i}集 (蛇沼鬼城).mp3`
-            })
-          }
+          this.resourcesList = this.bookList[2]
           this.jumpBeginTime = 53
           break
         }
@@ -139,7 +122,7 @@ export default {
     formatSeconds (value) {
       let seconds = parseInt(value)
       let middle = '00'
-      if (seconds > 60) {
+      if (seconds > 59) {
         middle = parseInt(seconds / 60) > 9 ? parseInt(seconds / 60) : '0' + parseInt(seconds / 60).toString()
         seconds = parseInt(seconds % 60) > 9 ? parseInt(seconds % 60) : '0' + parseInt(seconds % 60).toString()
       } else {
@@ -224,7 +207,7 @@ export default {
         console.log('预加载')
         this.url2 = this.resourcesList[this.index + 1].url
       }
-      if (this.length > 0 && this.length - this.pointTime < 60) {
+      if (this.length > 0 && !this.isDown && this.length - this.pointTime < 60) {
         this.handleNext()
       }
     }, 1000)
@@ -238,14 +221,14 @@ export default {
     })
     // 鼠标移动
     this.point.addEventListener('touchmove', e => {
-      if (this.isDown === false) {
+      if (this.isDown === false || this.pointTime <= 0 || this.pointTime >= this.length) {
         return
       }
-      // 获取x和y
+      // 获取当前clientX
       var nx = e.touches[0].clientX
-      // 计算移动后的左偏移量和顶部的偏移量
+      // 计算移动后的左偏移量
       var nl = nx - (this.x - this.l)
-      this.point.style.left = nl + 'px'
+      this.pointTime = nl / this.allWidth * this.length
     })
     // 鼠标抬起事件
     this.point.addEventListener('touchend', () => {

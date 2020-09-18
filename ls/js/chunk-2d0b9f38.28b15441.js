@@ -1,1 +1,0 @@
-(window["webpackJsonp"]=window["webpackJsonp"]||[]).push([["chunk-2d0b9f38"],{"34ab":function(n,e,t){"use strict";t.r(e);var u=function(){var n=this,e=n.$createElement,t=n._self._c||e;return t("div")},a=[],c={name:"playPage",data:function(){return{audio:null}},mounted:function(){},methods:{}},l=c,o=t("9ca4"),i=Object(o["a"])(l,u,a,!1,null,null,null);e["default"]=i.exports}}]);

@@ -71,24 +71,25 @@ export default {
       audio2: null,
       url2: 'https://www.zsp.cool/music/dmbj/qlss/周建龙-第01集 (秦岭神树).mp3',
       pointTime: 0, // 当前时间点
-      timer: null,
-      point: null,
-      showList: false,
-      resourcesList: [],
+      timer: null, //定时器
+      point: null, // 进度圆点
+      showList: false, //展示列表
+      resourcesList: [], // 当前节目列表
       index: 0, // 当前播放第几集
       x: 0,
       l: 0,
       isDown: false, // 是否按下进度点
       loading: false, // 音频是否加载完毕
       allWidth: 0, // 进度条总长度
-      value1: 0,
+      value1: 0, // 选中书籍
       option1: [
         { text: '秦岭神树', value: 0 },
         { text: '云顶天宫', value: 1 },
-        { text: '蛇沼鬼城', value: 2 }
+        { text: '蛇沼鬼城', value: 2 },
+        { text: '谜海归巢', value: 3 }
       ],
-      bookList: [],
-      jumpBeginTime: 55
+      bookList: [], // 所有节目
+      jumpBeginTime: 55 // 跳过开始时间
     }
   },
   watch: {
@@ -108,6 +109,11 @@ export default {
         case 2: {
           this.resourcesList = this.bookList[2]
           this.jumpBeginTime = 53
+          break
+        }
+        case 3: {
+          this.resourcesList = this.bookList[3]
+          this.jumpBeginTime = 51
           break
         }
       }
@@ -154,6 +160,14 @@ export default {
       list.push({
         url: `https://www.zsp.cool/music/dmbj/szgc/蛇沼鬼城${i}.mp3`,
         name: `周建龙 - 第${i}集 (蛇沼鬼城).mp3`
+      })
+    }
+    this.bookList.push(list)
+    list = []
+    for (let i = 1; i < 44; i++) {
+      list.push({
+        url: `https://www.zsp.cool/music/dmbj/mhgc/谜海归巢${i}.mp3`,
+        name: `周建龙 - 第${i}集 (谜海归巢).mp3`
       })
     }
     this.bookList.push(list)

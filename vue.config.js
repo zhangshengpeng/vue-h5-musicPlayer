@@ -1,5 +1,5 @@
 module.exports = {
-  publicPath: './',
+  publicPath: '/ls',
   outputDir: 'ls',
   productionSourceMap: false,
   configureWebpack: {
@@ -13,7 +13,8 @@ module.exports = {
   devServer: {
     proxy: {
       '/api': {
-        target: 'http://www.zsp.cool',
+        target: 'https://www.zsp.cool',
+        // target: 'http://localhost:81',
         changeOrigin: true,
         pathRewrite: {
           '^/api': ''

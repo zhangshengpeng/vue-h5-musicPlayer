@@ -2,14 +2,14 @@ import Axios from 'axios'
 import { Notify } from 'vant'
 import router from '../router'
 
-const axios = Axios.create({
+const upload = Axios.create({
   baseURL: process.env.NODE_ENV === 'development'
     ? '/api/'
     : 'https://www.zsp.cool/',
-  timeout: 10000
+  timeout: 10 * 60 * 1000
 })
 
-axios.interceptors.request.use(
+upload.interceptors.request.use(
   (config) => {
     const token = document.cookie.split('token=')[1]
     token && (config.headers.Authorization = token)
@@ -20,7 +20,7 @@ axios.interceptors.request.use(
     return Promise.error(error)
   }
 )
-axios.interceptors.response.use(
+upload.interceptors.response.use(
   config => {
     return config
   },
@@ -31,9 +31,9 @@ axios.interceptors.response.use(
         // 未登录则跳转登录页面，并携带当前页面的路径
         // 在登录成功后返回当前页面，这一步需要在登录页操作。
         case 401:
-          router.replace({
-            path: '/login'
-          })
+          // router.replace({
+          //   path: '/login'
+          // })
           Notify({ type: 'warning', message: `status:${error.response.status};${error.response.data}` })
           break
 
@@ -66,4 +66,4 @@ axios.interceptors.response.use(
     }
   }
 )
-export default axios
+export default upload

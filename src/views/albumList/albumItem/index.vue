@@ -153,6 +153,7 @@ export default {
     overflow: hidden;
     height: 280px;
     img {
+      object-fit: cover;
       filter: blur(10px);
       width: 120vw;
       height: auto;

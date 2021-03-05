@@ -2,6 +2,9 @@
 
 基于vue + muse—ui 写的一套h5端音乐播放器
 
+演示地址https://www.zsp.cool/ls
+我的邮箱：1612977540@qq.com
+
 ## Project setup
 ```
 npm install
@@ -16,4 +19,6 @@ npm run dev
 ```
 npm run build
 ```
+
+
 

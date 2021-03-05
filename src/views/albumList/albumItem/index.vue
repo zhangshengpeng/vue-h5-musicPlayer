@@ -33,7 +33,7 @@
           <mu-list-item-content>
             <mu-list-item-title style="font-size: 14px; color:#2c3e50">{{ item.title }}<span style="opacity:0.4;font-size: 14px"> - {{ item.artist }}</span></mu-list-item-title>
           </mu-list-item-content>
-          <mu-list-item-action class="close" @click="dlt(index)">
+          <mu-list-item-action v-if="album.creatorId == $store.state.user.id" class="close" @click="dlt(index)">
             <mu-button icon>
               <mu-icon value="close" />
             </mu-button>
@@ -43,13 +43,13 @@
     </div>
     <mu-bottom-sheet style="height: 170px;background: #f5f5f5" :open.sync="showBottom">
       <div class="btm">
-        <div>
+        <div v-if="album.creatorId == $store.state.user.id">
           <div class="block" @click="$refs.upload.chooseFile()">
             <mu-icon value="playlist_add"></mu-icon>
           </div>
           添加歌曲
         </div>
-        <div @click="$router.push(`/album/edit/${album.id}`)">
+        <div v-if="album.creatorId == $store.state.user.id" @click="$router.push(`/album/edit/${album.id}`)">
           <div class="block">
             <mu-icon value="edit"></mu-icon>
           </div>

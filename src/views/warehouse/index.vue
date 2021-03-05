@@ -81,7 +81,7 @@ export default {
               const scale = 1 - Math.abs(slideProgress) / 5
               if (scale === 1) {
                 if (e.target.currentSrc === s.slides[i].getElementsByTagName('img')[0].currentSrc) {
-                  const id = this.albums.filter(a => a.img === e.target.currentSrc.split('www.zsp.cool/')[1])[0].id
+                  const id = this.albums.filter(a => encodeURI(a.img) === e.target.currentSrc.split('www.zsp.cool/')[1])[0].id
                   this.$router.push(`/album/${id}`)
                   return
                 }

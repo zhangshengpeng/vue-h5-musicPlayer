@@ -29,12 +29,15 @@ export default {
     fileName: { // formData表单，字段名称
       type: String,
       default: 'img'
+    },
+    value: {
+      type: String,
+      default: ''
     }
   },
   name: 'ImgUpload',
   data () {
     return {
-      value: '',
       file: ''
     }
   },
@@ -47,8 +50,8 @@ export default {
       const formData = new FormData()
       formData.append(this.fileName, this.file)
       this.$axios.post(this.baseUrl, formData).then(res => {
-        this.value = res.data.imgUrl
-        this.$emit('input', this.value)
+        // this.value = res.data.imgUrl
+        this.$emit('input', res.data.imgUrl)
       })
     }
   }

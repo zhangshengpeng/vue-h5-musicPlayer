@@ -1,7 +1,7 @@
 <template>
   <div class="page">
     <div class="top-bar">
-      <div class="back" @click="$router.push(`/album/${id}`)">
+      <div class="back" @click="$router.go(-1)">
         <mu-icon value="keyboard_arrow_left"></mu-icon>
       </div>
       <div class="active">编辑歌单</div>

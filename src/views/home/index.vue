@@ -78,18 +78,18 @@
           </div>
         </div>
       </div>
-      <!-- <div class="type">
+      <div class="type">
         <div class="type-title">
-          <span>排行榜</span>
+          <span>最新</span>
           <div style="display: flex; align-items: center">更多 <mu-icon value="keyboard_arrow_right"/></div>
         </div>
         <div class="type-box">
-          <div class="type-item" v-for="item in recommends" :key="item.id">
+          <div class="type-item" v-for="item in news" :key="item.id">
             <div><img :src="`https://www.zsp.cool${item.img || '/img/default.jpg'}`"></div>
             <div>{{ item.name }}</div>
           </div>
         </div>
-      </div> -->
+      </div>
     </div>
   </div>
 </template>
@@ -102,7 +102,8 @@ export default {
     return {
       myAlbum: [],
       favorites: [],
-      recommends: []
+      recommends: [],
+      news: []
     }
   },
   created () {
@@ -113,6 +114,9 @@ export default {
       this.favorites = res.data
     })
     this.$axios.get('/recommend/20').then(res => {
+      this.recommends = res.data
+    })
+    this.$axios.get('/new/20').then(res => {
       this.recommends = res.data
     })
   },

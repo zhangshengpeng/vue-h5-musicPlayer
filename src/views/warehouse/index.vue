@@ -108,7 +108,7 @@ export default {
     this.$axios.get('/recommend/5').then(res => {
       this.banners = res.data
     })
-    this.$axios.get('/recommend/30').then(res => {
+    this.$axios.get('/new/30').then(res => {
       this.albums = res.data
     })
   },

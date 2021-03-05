@@ -74,7 +74,7 @@
         <div class="type-box">
           <div class="type-item" v-for="item in recommends" :key="item.id" @click="$router.push(`/album/${item.id}`)">
             <div><img :src="`https://www.zsp.cool${item.img || '/img/default.jpg'}`"></div>
-            <div>{{ item.name }}</div>
+            <div>{{ item.albumName }}</div>
           </div>
         </div>
       </div>
@@ -86,7 +86,7 @@
         <div class="type-box">
           <div class="type-item" v-for="item in news" :key="item.id">
             <div><img :src="`https://www.zsp.cool${item.img || '/img/default.jpg'}`"></div>
-            <div>{{ item.name }}</div>
+            <div>{{ item.albumName }}</div>
           </div>
         </div>
       </div>

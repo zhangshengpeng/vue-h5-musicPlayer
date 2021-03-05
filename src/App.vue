@@ -85,4 +85,12 @@ html, body {
   height: 80px;
   border-radius: 8px;
 }
+/* At the top level of your code */
+// @media screen and (min-width: 900px) {
+//   #app {
+//     width: 414px;
+//     height: 736px;
+//     overflow: hidden;
+//   }
+// }
 </style>

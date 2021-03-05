@@ -117,7 +117,7 @@ export default {
       this.recommends = res.data
     })
     this.$axios.get('/new/20').then(res => {
-      this.recommends = res.data
+      this.news = res.data
     })
   },
   computed: {

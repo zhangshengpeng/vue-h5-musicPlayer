@@ -10,7 +10,7 @@
       <div class="detail">关注 <span class="follw"> 5 </span> <div class="line" /> 粉丝 <span class="follw">2</span></div>
     </div>
     <div class="menu">
-      <div @click="handleType('/favorite')">
+      <div @click="handleType('/warehouse')">
         <mu-icon value="home"></mu-icon>
         <div>曲库</div>
       </div>
@@ -35,7 +35,7 @@
       <div class="type">
         <div class="type-title">
           <span>自建歌单</span>
-          <div style="display: flex; align-items: center">更多 <mu-icon value="keyboard_arrow_right"/></div>
+          <div style="display: flex; align-items: center" @click="handleType('/album')">更多 <mu-icon value="keyboard_arrow_right"/></div>
         </div>
         <div class="type-box">
           <div class="type-item" v-for="item in myAlbum" :key="item.id" @click="$router.push(`/album/${item.id}`)">
@@ -52,39 +52,44 @@
       <div class="type">
         <div class="type-title">
           <span>我的收藏</span>
-          <div style="display: flex; align-items: center">更多 <mu-icon value="keyboard_arrow_right"/></div>
+          <div style="display: flex; align-items: center" @click="handleType('/favorite')">更多 <mu-icon value="keyboard_arrow_right"/></div>
         </div>
         <div class="type-box">
-          <div class="type-item" v-for="item in favorites" :key="item.id">
+          <div class="type-item" v-for="item in favorites" :key="item.id" @click="$router.push(`/album/${item.id}`)">
             <div><img :src="`https://www.zsp.cool${item.img || '/img/default.jpg'}`"></div>
             <div>{{ item.albumName }}</div>
+          </div>
+          <div class="type-item" @click="handleType('/album')">
+            <div class="clear-box">
+              <div><mu-icon value="add"></mu-icon></div>
+            </div>
           </div>
         </div>
       </div>
       <div class="type">
         <div class="type-title">
           <span>推荐</span>
-          <div style="display: flex; align-items: center">更多 <mu-icon value="keyboard_arrow_right"/></div>
+          <div style="display: flex; align-items: center"  @click="handleType('/warehouse')">更多 <mu-icon value="keyboard_arrow_right"/></div>
         </div>
         <div class="type-box">
-          <div class="type-item" v-for="item in favorites" :key="item.id">
+          <div class="type-item" v-for="item in recommends" :key="item.id" @click="$router.push(`/album/${item.id}`)">
             <div><img :src="`https://www.zsp.cool${item.img || '/img/default.jpg'}`"></div>
             <div>{{ item.name }}</div>
           </div>
         </div>
       </div>
-      <div class="type">
+      <!-- <div class="type">
         <div class="type-title">
           <span>排行榜</span>
           <div style="display: flex; align-items: center">更多 <mu-icon value="keyboard_arrow_right"/></div>
         </div>
         <div class="type-box">
-          <div class="type-item" v-for="item in favorites" :key="item.id">
+          <div class="type-item" v-for="item in recommends" :key="item.id">
             <div><img :src="`https://www.zsp.cool${item.img || '/img/default.jpg'}`"></div>
             <div>{{ item.name }}</div>
           </div>
         </div>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
@@ -96,19 +101,19 @@ export default {
   data () {
     return {
       myAlbum: [],
-      favorites: [
-        { name: '波光嶙峋', id: '112', img: '/img/4b17a501a18b87d682c4d70b090828381f30fd28.jpg' },
-        { name: '肆无忌惮', id: '113', img: '/img/timg (8).jpg' },
-        { name: '这个世界既不正确，也不温柔', id: '114', img: '/img/1492273223267.jpg' },
-        { name: '无限瞬间', id: '115', img: '/img/timg (8).jpg' },
-        { name: 'ACG原声', id: '116', img: '/img/1492273223267.jpg' },
-        { name: '荧幕原声', id: '117', img: '/img/4b17a501a18b87d682c4d70b090828381f30fd28.jpg' }
-      ]
+      favorites: [],
+      recommends: []
     }
   },
-  mounted () {
+  created () {
     this.$axios.get('/album-list').then((res) => {
       this.myAlbum = res.data
+    })
+    this.$axios.get(`/favoriteList/${this.$store.state.user.id}/album`).then(res => {
+      this.favorites = res.data
+    })
+    this.$axios.get('/recommend/20').then(res => {
+      this.recommends = res.data
     })
   },
   computed: {

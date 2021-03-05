@@ -117,6 +117,9 @@ export default {
         this.showCover = true
       }
     }
+  },
+  beforeDestroy () {
+    clearTimeout(this.timer)
   }
 }
 </script>

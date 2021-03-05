@@ -32,6 +32,7 @@ export default new Vuex.Store({
       state.now = now
     },
     setIndex (state, index) {
+      if (state.song.id === state.songList[index].id && state.status) { return }
       state.index = index
       state.status = false
       this.commit('setSong')
@@ -39,7 +40,7 @@ export default new Vuex.Store({
       this.commit('setMax', 0)
       this.commit('setLocalSong', state.songList[state.index])
       this.dispatch('getSongInfo')
-      this.dispatch('getIsFavorite', 'song')
+      this.dispatch('getIsFavorite', { type: 'song', id: state.songList[index].id })
       localStorage.setItem('index', index)
     },
     setUser (state, user) {
@@ -94,24 +95,35 @@ export default new Vuex.Store({
         ctx.commit('setSong', res.data)
       })
     },
-    setIsFavtite (ctx, isFavorite) { // 收藏/取消收藏
-      if (isFavorite) {
-        axios.post('/favorite', {
-          songId: ctx.state.song.id,
-          userId: ctx.state.user.id,
-          type: 'song',
-          albumId: ''
-        }).then(() => {
-          ctx.dispatch('getIsFavorite', 'song')
-        })
-      } else {
-        axios.delete(`/favorite/${ctx.state.favoriteId}`).then(() => {
-          ctx.dispatch('getIsFavorite', 'song')
-        })
-      }
+    setIsFavtite (ctx, { isFavorite, type, id }) { // 收藏/取消收藏
+      return new Promise((resolve, reject) => {
+        if (isFavorite) {
+          axios.post('/favorite', {
+            songId: id,
+            userId: ctx.state.user.id,
+            type: type
+          }).then(res => {
+            if (type === 'album') {
+              resolve(res.data.data.id)
+            }
+            ctx.commit('setFavorite', true)
+            ctx.dispatch('getIsFavorite', { type: 'song', id: ctx.state.song.id })
+          })
+        } else {
+          const favoriteId = type === 'song' ? ctx.state.favoriteId : id
+          axios.delete(`/favorite/${favoriteId}`).then(() => {
+            if (type === 'album') { resolve(false) }
+            ctx.dispatch('getIsFavorite', { type: 'song', id: ctx.state.song.id })
+            ctx.commit('setFavorite', false)
+          })
+        }
+      })
     },
-    getIsFavorite (ctx, type) { // 获取是否已收藏当前歌曲
-      axios.get(`/favorite/${type}/${ctx.state.user.id}/${ctx.state.song.id}`).then(res => {
+    getIsFavorite (ctx, { type, id }) { // 获取是否已收藏当前歌曲/专辑
+      return axios.get(`/favorite/${type}/${ctx.state.user.id}/${id}`).then(res => {
+        if (type === 'album') {
+          return res.data.data ? res.data.data.id : ''
+        }
         if (res.data.data) {
           ctx.commit('setFavoriteId', res.data.data.id)
           ctx.commit('setFavorite', true)

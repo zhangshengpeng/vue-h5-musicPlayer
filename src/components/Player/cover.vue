@@ -82,8 +82,7 @@ export default {
   },
   data: () => {
     return {
-      base64: '',
-      mouseDown: false
+      base64: ''
     }
   },
   computed: {
@@ -119,7 +118,12 @@ export default {
   },
   methods: {
     handleFavorite () {
-      this.$store.dispatch('setIsFavtite', !this.isFavorite)
+      const p = {
+        isFavorite: !this.isFavorite,
+        type: 'song',
+        id: this.$store.state.song.id
+      }
+      this.$store.dispatch('setIsFavtite', p)
     },
     handlePlay () {
       this.$parent.handlePlay()

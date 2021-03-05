@@ -33,7 +33,7 @@ export default {
       this.type = type || 'info'
       this.time = time || 2000
       if (this.timer) {
-        this.timer = clearTimeout(this.timer)
+        clearTimeout(this.timer)
       }
       this.showTips = true
       this.timer = setTimeout(() => {

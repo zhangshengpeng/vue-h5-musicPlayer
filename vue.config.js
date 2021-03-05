@@ -13,8 +13,8 @@ module.exports = {
   devServer: {
     proxy: {
       '/api': {
-        target: 'https://www.zsp.cool',
-        // target: 'http://localhost:81',
+        // target: 'https://www.zsp.cool',
+        target: 'http://localhost:81',
         changeOrigin: true,
         pathRewrite: {
           '^/api': ''
@@ -23,7 +23,7 @@ module.exports = {
     }
   },
   pwa: {
-    name: '盗墓笔记听书',
+    name: 'z-music',
     themeColor: 'rgb(54, 44, 43)'
   }
 }

@@ -77,7 +77,7 @@ export default {
         this.chunckList.forEach((item, index) => {
           promiseList.push(new Promise((resolve, reject) => {
             this.$axios.post('/chunckAlready', { name: data.hash, hash: `${data.hash}-${index}` }).then(res => {
-              if (res.data.already === false) {
+              if (res.data.already === false) { // 后端不存在该切片，上传切片
                 const formData = new FormData()
                 formData.append('hash', `${data.hash}-${index}`)
                 formData.append('name', `${data.hash}`)
@@ -94,10 +94,10 @@ export default {
             })
           }))
         })
-        Promise.all(promiseList).then(() => {
+        Promise.all(promiseList).then(() => { // 切片上传完毕，告诉后端合并切片
           this.$axios.post('/merge', { hash: data.hash, fileName: `${data.hash}-${this.file.name}` }).then((res) => {
             this.$emit('finish', res.data)
-            if (this.fileList.length) {
+            if (this.fileList.length) { // 如果选中多个文件，重复切片、上传操作
               this.file = this.fileList[0]
               this.chunckList = this.createChunkList(this.fileList.shift())
               window.worker.postMessage(this.chunckList)
@@ -118,7 +118,7 @@ export default {
     },
     createChunkList (file) {
       const fileChunkList = []
-      const chunkSize = 1024 * 1024 * 40
+      const chunkSize = 1024 * 1024 * 40 // 切片大小为40MB
       let cur = 0
       while (cur < file.size) {
         fileChunkList.push({ file: file.slice(cur, cur + chunkSize), percent: 0 })

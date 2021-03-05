@@ -14,9 +14,9 @@
         <div v-show="!isSong">{{ length }} 张歌单</div>
       </div>
       <div>
-        <mu-list v-show="isSong" key="1">
-          <mu-list-item v-for="(item, index) in songs" :key="item.id" button @click="changeItem(index)">
-            <mu-list-item-content>
+        <mu-list class="item-list" v-show="isSong" key="1">
+          <mu-list-item v-for="(item, index) in songs" :key="item.id" button @click="changeItem(index, $event)">
+            <mu-list-item-content >
               <mu-list-item-title style="font-size: 14px; color:#2c3e50">{{ item.title }}<span style="opacity:0.4;font-size: 14px"> - {{ item.artist }}</span></mu-list-item-title>
             </mu-list-item-content>
             <mu-list-item-action class="close" @click="dlt(index)">
@@ -29,12 +29,12 @@
         <mu-list v-show="!isSong" textline="three-line" key="2">
           <mu-list-item v-for="item in favAlbum" :key="item.id" avatar button @click="$router.push(`/album/${item.id}`)">
             <img :src="`https://www.zsp.cool${item.img || '/img/default.jpg'}`" class="album-img">
-            <mu-list-item-content>
-              <mu-list-item-title>{{ item.name }}</mu-list-item-title>
+            <mu-list-item-content style="padding-left: 10px;">
+              <mu-list-item-title style="height: 40px;">{{ item.albumName }}</mu-list-item-title>
               <mu-list-item-sub-title>{{ item.length }}首</mu-list-item-sub-title>
             </mu-list-item-content>
             <mu-list-item-action>
-              <mu-button icon>
+              <mu-button icon >
                 <mu-icon value="keyboard_arrow_right"></mu-icon>
               </mu-button>
             </mu-list-item-action>
@@ -54,9 +54,12 @@ export default {
       isSong: true
     }
   },
-  mounted () {
+  created () {
     this.$axios.get(`/favoriteList/${this.$store.state.user.id}/song`).then((res) => {
       this.songs = res.data
+    })
+    this.$axios.get(`/favoriteList/${this.$store.state.user.id}/album`).then(res => {
+      this.favAlbum = res.data
     })
   },
   computed: {
@@ -65,11 +68,19 @@ export default {
     }
   },
   methods: {
+    dlt (index) {
+      this.$axios.delete(`/favorite/${this.songs[index].favoriteId}`).then(() => {
+        this.$axios.get(`/favoriteList/${this.$store.state.user.id}/song`).then((res) => {
+          this.songs = res.data
+        })
+      })
+    },
     handleBar (flag) { // 切换tab
       if (this.isSong === flag) return
       this.isSong = flag
     },
-    changeItem (index) {
+    changeItem (index, $event) {
+      if ($event.path.length === 16) { return }
       this.$store.commit('setSongInfo', {
         songList: this.songs
       })
@@ -80,6 +91,10 @@ export default {
 </script>
 
 <style lang="less" scoped>
+  .item-list {
+    height: calc(100%);
+    overflow: auto;
+  }
   .active {
     font-weight: 700;
   }

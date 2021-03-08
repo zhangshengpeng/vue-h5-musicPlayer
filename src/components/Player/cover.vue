@@ -229,4 +229,10 @@ export default {
       }
     }
   }
+  @media screen and (min-width: 500px) {
+  ::-webkit-scrollbar {
+    display: none;/*ChromeSafari*/
+  }
+
+}
 </style>

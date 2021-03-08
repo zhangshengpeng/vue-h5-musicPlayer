@@ -73,7 +73,9 @@ export default {
 
 <style lang="less" scoped>
   .list {
-    height: calc( 100% - 30vh);
+    position: absolute;
+    width: 375px;
+    height: calc( 667px - 30vh);
   }
   .top {
     height: 57px;
@@ -87,7 +89,7 @@ export default {
     position: relative;
     height: 50px;
     line-height: 50px;
-    width: 100%;
+    width: 375px;
     border-top: 1px solid #eeeeee;
     text-align: center;
   }
@@ -104,5 +106,8 @@ export default {
     .material-icons {
       font-size: 16px;
     }
+  }
+  @media screen and (min-width: 500px) {
+
   }
 </style>

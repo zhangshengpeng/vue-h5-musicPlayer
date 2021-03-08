@@ -2,10 +2,10 @@
   <div class="home">
     <div class="card user">
       <div class="info">
-        <div style="height: 60px; width: 60px">
+        <div style="height: 60px; width: 60px" @click="$router.push('/personInfo?id=self')">
           <img class="head" v-if="user.url" :src="`https://www.zsp.cool${user.url || '/img/default.jpg'}`">
         </div>
-        <span>{{ user.name }}</span>
+        <span  @click="$router.push('/personInfo?id=self')">{{ user.name }}</span>
       </div>
       <div class="detail">关注 <span class="follw"> 5 </span> <div class="line" /> 粉丝 <span class="follw">2</span></div>
     </div>

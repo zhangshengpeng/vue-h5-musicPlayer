@@ -1,38 +1,38 @@
 <template>
-<div>
-  <mu-slide-bottom-transition>
-    <div v-show="show && !showList && !showCover" class="player">
-      <div class="bc" />
-      <div v-show="false" style="position: absolute; top: -100px">
-        <audio ref="audio" :src="song.src || '/img/default.jpg'" id="audio" controls></audio>
-      </div>
-      <div class="music" @click="handlePlayer">
-        <div class="cd"><img :src="`data:image/jpg;base64,${song.image || '/img/default.jpg' }`" alt=""></div>
-        <div class="song">{{ song.title }} - {{ song.artist }}</div>
-        <div class="control" @click="handlePlay">
-          <div class="control-icon" v-show="isReady">
-            <mu-icon :value="icon"></mu-icon>
+  <div>
+    <mu-slide-bottom-transition>
+      <div v-show="show && !showList && !showCover" class="player">
+        <div class="bc" />
+        <div v-show="false" style="position: absolute; top: -100px">
+          <audio ref="audio" :src="song.src || '/img/default.jpg'" id="audio" controls></audio>
+        </div>
+        <div class="music" @click="handlePlayer">
+          <div class="cd"><img class="cd-img" :src="`data:image/jpg;base64,${song.image || '/img/default.jpg' }`" alt=""></div>
+          <div class="song">{{ song.title }} - {{ song.artist }}</div>
+          <div class="control" @click="handlePlay">
+            <div class="control-icon" v-show="isReady">
+              <mu-icon :value="icon"></mu-icon>
+            </div>
+            <mu-circular-progress
+              class="circular-progress"
+              :mode="isReady ? 'determinate' : 'indeterminate'"
+              :value="now"
+              :max="max"
+              :min="min"
+              :size="27"
+              :stroke-width="2"
+              color="#ffffff">
+            </mu-circular-progress>
           </div>
-          <mu-circular-progress
-            class="circular-progress"
-            :mode="isReady ? 'determinate' : 'indeterminate'"
-            :value="now"
-            :max="max"
-            :min="min"
-            :size="27"
-            :stroke-width="2"
-            color="#ffffff">
-          </mu-circular-progress>
-        </div>
-        <div class="list" @click="showList = true">
-          <mu-icon value="reorder"></mu-icon>
+          <div class="list" @click="showList = true">
+            <mu-icon value="reorder"></mu-icon>
+          </div>
         </div>
       </div>
-    </div>
-  </mu-slide-bottom-transition>
-  <music-list :show.sync="showList"></music-list>
-  <cover :show.sync="showCover"/>
-</div>
+    </mu-slide-bottom-transition>
+    <music-list :show.sync="showList"></music-list>
+    <cover :show.sync="showCover"/>
+  </div>
 </template>
 
 <script>
@@ -113,7 +113,7 @@ export default {
     },
     handlePlayer (e) {
       const className = e.target.getAttribute('class')
-      if (['music', 'song'].includes(className)) {
+      if (['music', 'song', 'cd-img'].includes(className)) {
         this.showCover = true
       }
     }
@@ -205,4 +205,12 @@ export default {
     top: -1px;
     left: -1px;
   }
+  // @media screen and (min-width: 500px) {
+  //   .player {
+  //     width: 375px;
+  //     position: absolute;
+  //     bottom: 0px;
+  //     z-index: 10;
+  //   }
+  // }
 </style>

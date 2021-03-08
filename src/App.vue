@@ -1,8 +1,6 @@
 <template>
   <div id="app">
-    <transition :name='direction'>
-      <router-view class="appview" />
-    </transition>
+    <router-view class="appview" />
     <player :show="isShow"/>
   </div>
 </template>
@@ -12,19 +10,18 @@ export default {
   components: { Player },
   created () {
     const user = JSON.parse(localStorage.getItem('user'))
-    if (user) { // 如果存在本地信息，先使用本地信息，后重新获取一次信息
+    if (user) { // 如果存在本地信息，先使用本地信息
       this.$store.commit('setUser', user)
     }
     this.$store.dispatch('getUser')
 
     const data = JSON.parse(localStorage.getItem('songInfo'))
-    const index = parseInt(localStorage.getItem('index')) | 0
+    const index = parseInt(localStorage.getItem('index')) || 0
     this.$store.commit('setSongInfo', data)
     this.$store.commit('setIndex', index)
   },
   data () {
     return {
-      direction: ''
     }
   },
   computed: {
@@ -85,12 +82,23 @@ html, body {
   height: 80px;
   border-radius: 8px;
 }
-/* At the top level of your code */
-// @media screen and (min-width: 900px) {
+// @media screen and (min-width: 500px) {
+//   ::-webkit-scrollbar {
+//     display: none;/*ChromeSafari*/
+//   }
+//   body {
+//     padding-top: 50px;
+//   }
 //   #app {
-//     width: 414px;
-//     height: 736px;
+//     margin: 0 auto;
+//     position: relative;
+//     width: 375px;
+//     height: 667px;
 //     overflow: hidden;
+//     .appview {
+//       height: 667px;
+//       overflow: auto;
+//     }
 //   }
 // }
 </style>

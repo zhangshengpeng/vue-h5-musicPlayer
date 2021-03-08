@@ -75,6 +75,9 @@ export default {
     this.$axios.get('/album-list').then((res) => {
       this.myAlbum = res.data
     })
+    this.$axios.get(`/favoriteList/${this.$store.state.user.id}/album`).then(res => {
+      this.favAlbum = res.data
+    })
   },
   computed: {
     length () {

@@ -50,11 +50,25 @@ const routes = [
     path: '/warehouse',
     name: 'warehouse',
     component: () => import('../views/warehouse/index.vue')
+  },
+  {
+    path: '/personInfo',
+    name: 'person',
+    component: () => import('../views/personInfo.vue')
   }
 ]
 
 const router = new VueRouter({
   routes
+})
+
+router.beforeEach((to, from, next) => {
+  // ...
+  if (to.name === from.name) {
+    next(false)
+  } else {
+    next()
+  }
 })
 
 export default router

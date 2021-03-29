@@ -50,13 +50,14 @@ export default new Vuex.Store({
       state.showBottom = flag
     },
     setSongInfo (state, data) { // 切换歌单
-      if (!data) { data = { songList: [{ artist: 'elijah who', id: 527, name: 'elijah who - so far away.mp3', title: 'so far away' }] } }
+      if (!data) { data = { songList: [{ artist: '横山克 (よこやま まさる)', id: 668, name: 'まるで映画のワンシーンのように (犹如电影的一幕)', title: 'まるで映画のワンシーンのように (犹如电影的一幕)' }] } }
       state.songList = data.songList
       this.commit('setLocalData', {
         songList: data.songList
       })
     },
     setSong (state, song = state.songList[state.index]) { // 切换正在播放歌曲
+      console.log('song', song, state.songList[state.index])
       state.song = song
     },
     next (state) {

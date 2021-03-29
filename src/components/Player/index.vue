@@ -4,10 +4,10 @@
       <div v-show="show && !showList && !showCover" class="player">
         <div class="bc" />
         <div v-show="false" style="position: absolute; top: -100px">
-          <audio ref="audio" :src="song.src || '/img/default.jpg'" id="audio" controls></audio>
+          <audio ref="audio" :src="song.src" id="audio" controls></audio>
         </div>
         <div class="music" @click="handlePlayer">
-          <div class="cd"><img class="cd-img" :src="`data:image/jpg;base64,${song.image || '/img/default.jpg' }`" alt=""></div>
+          <div class="cd"><img class="cd-img" :src="`data:image/jpg;base64,${song.image}`" alt=""></div>
           <div class="song">{{ song.title }} - {{ song.artist }}</div>
           <div class="control" @click="handlePlay">
             <div class="control-icon" v-show="isReady">

@@ -79,8 +79,9 @@ export default {
       if (this.isSong === flag) return
       this.isSong = flag
     },
-    changeItem (index, $event) {
-      if ($event.path.length === 16) { return }
+    changeItem (index, evt) {
+      const path = evt.path || (evt.composedPath && evt.composedPath()) || ''
+      if (path === 16) { return }
       this.$store.commit('setSongInfo', {
         songList: this.songs
       })

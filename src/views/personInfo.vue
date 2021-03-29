@@ -19,10 +19,15 @@
     <div class="main">
       <h3>我的乐库</h3>
     </div>
+    <div id="print">
+      <div class="zsp">hello zsp</div>
+    </div>
+    <button @click="onPrint">打印</button>
   </div>
 </template>
 
 <script>
+
 export default {
   data: () => ({
     user: {
@@ -34,6 +39,32 @@ export default {
       this.user = this.$store.state.user
     }
     console.log(this.user)
+  },
+  methods: {
+    onPrint () {
+      let iframe = document.getElementById('print-iframe')
+      iframe && document.body.removeChild(iframe)
+
+      iframe = document.createElement('iframe')
+      iframe.setAttribute('id', 'print-iframe')
+      iframe.setAttribute('style', 'display; none')
+      document.body.appendChild(iframe)
+
+      const str = document.getElementById('print').innerHTML
+      const doc = iframe.contentDocument
+      doc.body.innerHTML = str
+
+      const link = document.createElement('link')
+      link.href = '/static/css/print.css'
+      link.rel = 'stylesheet'
+      link.type = 'text/css'
+      link.media = 'print'
+      doc.head.appendChild(link)
+      link.onload = () => {
+        console.log(doc)
+        iframe.contentWindow.print()
+      }
+    }
   }
 }
 </script>

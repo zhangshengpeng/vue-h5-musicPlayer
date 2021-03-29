@@ -7,7 +7,7 @@
         </div>
         <span  @click="$router.push('/personInfo?id=self')">{{ user.name }}</span>
       </div>
-      <div class="detail">关注 <span class="follw"> 5 </span> <div class="line" /> 粉丝 <span class="follw">2</span></div>
+      <div class="detail">关注 <span class="follw"> 5 </span> <div class="line" /> 健康码 <span class="follw">2</span></div>
     </div>
     <div class="menu">
       <div @click="handleType('/warehouse')">
@@ -26,7 +26,7 @@
         <mu-icon value="check_circle"></mu-icon>
         <div>关注</div>
       </div>
-      <div>
+      <div @click="$router.push('/healthCode')">
         <mu-icon value="contacts"></mu-icon>
         <div>粉丝</div>
       </div>

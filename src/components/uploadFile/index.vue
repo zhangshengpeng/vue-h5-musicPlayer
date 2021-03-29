@@ -83,7 +83,7 @@ export default {
                 formData.append('name', `${data.hash}`)
                 formData.append(this.fileName, item.file)
                 this.$upload.post(this.baseUrl, formData, {
-                  onUploadProgress: progressEvent => { 
+                  onUploadProgress: progressEvent => {
                     this.chunckList[index].percent = (progressEvent.loaded / progressEvent.total * 100 | 0)
                   }
                 }).then(res => { resolve(res) })

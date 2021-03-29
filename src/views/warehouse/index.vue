@@ -112,8 +112,22 @@ export default {
       this.albums = res.data
     })
   },
+  mounted () {
+    // 假设你的请求工具axios是这样使用
+    this.$axios.post('后端地址').then(res => {
+      this.initBar(res.data.dataList)
+    })
+  },
   methods: {
-
+    initBar (dataList) {
+      const myCharts = '此处省略'
+      myCharts.setOption({
+        dataset: {
+          source: dataList
+        }
+        // 略
+      })
+    }
   }
 }
 </script>

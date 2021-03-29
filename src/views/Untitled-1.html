@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div id="print">
+    <div class="zsp">hello zsp</div>
+  </div>
+  <button @click="onPrint">打印</button>
+</body>
+<script>
+  function onPrint () {
+    let iframe = document.getElementById('print-iframe')
+    iframe && document.body.removeChild(iframe)
+
+    iframe = document.createElement('iframe')
+    iframe.setAttribute('id', 'print-iframe')
+    iframe.setAttribute('style', 'display; none')
+    document.body.appendChild(iframe)
+
+    const str = document.getElementById('print').innerHTML
+    const doc = iframe.contentWindow.document
+    doc.body.innerHTML = `<div>${str}</div>`
+
+    const link = document.createElement('link')
+    link.href = '/public/css/print.css'
+    link.rel = 'stylesheet'
+    link.type = 'text/css'
+    doc.head.appendChild(link)
+    link.onload = function () {
+      console.log(iframe)
+      iframe.contentWindow.print()
+    }
+  }
+</script>
+</html>
+

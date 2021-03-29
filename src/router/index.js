@@ -60,7 +60,7 @@ const routes = [
     path: '/test',
     name: 'test',
     component: () => import('../views/test.vue')
-  },
+  }
   // {
   //   path: '/healthCode',
   //   name: 'healthCode',

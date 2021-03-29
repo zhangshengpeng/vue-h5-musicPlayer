@@ -61,11 +61,11 @@ const routes = [
     name: 'test',
     component: () => import('../views/test.vue')
   },
-  {
-    path: '/healthCode',
-    name: 'healthCode',
-    component: () => import('../views/healthCode.vue')
-  }
+  // {
+  //   path: '/healthCode',
+  //   name: 'healthCode',
+  //   component: () => import('../views/healthCode.vue')
+  // }
 ]
 
 const router = new VueRouter({

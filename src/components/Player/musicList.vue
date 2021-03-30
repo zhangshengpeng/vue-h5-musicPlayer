@@ -74,7 +74,7 @@ export default {
 <style lang="less" scoped>
   .list {
     position: absolute;
-    width: 375px;
+    width: 100vw;
     height: calc( 667px - 30vh);
   }
   .top {
@@ -89,7 +89,7 @@ export default {
     position: relative;
     height: 50px;
     line-height: 50px;
-    width: 375px;
+    width: 100vw;
     border-top: 1px solid #eeeeee;
     text-align: center;
   }

@@ -68,8 +68,7 @@ export default {
       return this.$store.state.song
     },
     now () {
-      // console.log(this.$store.state.now, this.$store.state.max)
-      if (this.$store.state.now && this.$store.state.now > this.$store.state.max) {
+      if (this.$store.state.max && this.$store.state.now > this.$store.state.max) {
         this.$store.commit('next')
       }
       return this.$store.state.now

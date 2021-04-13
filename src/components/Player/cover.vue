@@ -130,9 +130,11 @@ export default {
     },
     prev () {
       this.$store.commit('prev')
+      clearTimeout(this.$parent.timer)
     },
     next () {
       this.$store.commit('next')
+      clearTimeout(this.$parent.timer)
     }
   }
 }

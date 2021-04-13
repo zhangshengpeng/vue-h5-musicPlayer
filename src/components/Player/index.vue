@@ -60,6 +60,7 @@ export default {
   },
   watch: {
     status (val) {
+      console.log('播放状态', val)
       this.icon = val ? 'pause' : 'play_arrow'
       if (!val) {
         this.audio.pause()

@@ -2,8 +2,9 @@
 
 基于vue + muse—ui 写的一套h5端音乐播放器
 
-演示地址https://www.zsp.cool/ls
+演示地址https://www.zsp.cool/ls，不兼容pc界面
 我的邮箱：1612977540@qq.com
+
 
 配套后端项目地址：https://gitee.com/zhangshengpengBXH/firstLinuxService.git
 

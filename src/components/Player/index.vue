@@ -61,10 +61,14 @@ export default {
   watch: {
     status (val) {
       this.icon = val ? 'pause' : 'play_arrow'
+      if (!val) {
+        this.audio.pause()
+      }
     }
   },
   computed: {
     song () {
+      console.log('song change')
       return this.$store.state.song
     },
     now () {

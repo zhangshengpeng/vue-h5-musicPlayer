@@ -35,6 +35,7 @@ export default new Vuex.Store({
       if (state.song.id === state.songList[index].id && state.status) { return }
       state.index = index
       state.status = false
+      state.isReady = false
       this.commit('setSong')
       this.commit('setNow', 0)
       this.commit('setMax', 0)

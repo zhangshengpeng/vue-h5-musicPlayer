@@ -73,7 +73,7 @@ export default {
 
 <style lang="less" scoped>
   .list {
-    position: absolute;
+    // position: absolute;
     width: 100vw;
     height: calc( 667px - 30vh);
   }

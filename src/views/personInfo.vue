@@ -22,7 +22,7 @@
     <div id="print">
       <div class="zsp">hello zsp</div>
     </div>
-    <button @click="onPrint">打印</button>
+    <!-- <button @click="onPrint">打印</button> -->
   </div>
 </template>
 
